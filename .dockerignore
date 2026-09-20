@@ -1,0 +1,7 @@
+node_modules
+.next
+.git
+.venv
+.env
+backend/uploads
+*.log
