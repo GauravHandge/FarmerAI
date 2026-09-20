@@ -1,7 +1,15 @@
 import os
+import sys
 import json
 import asyncio
+from pathlib import Path
 from typing import List, Optional
+
+# Add project root directory to sys.path so 'backend.*' imports work regardless of working directory
+BASE_DIR = Path(__file__).resolve().parent.parent
+if str(BASE_DIR) not in sys.path:
+    sys.path.insert(0, str(BASE_DIR))
+
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, JSONResponse
