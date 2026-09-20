@@ -8,11 +8,7 @@ import { ArrowLeft, Lock, Mail, Sparkles } from "lucide-react"
 export default function SignInPage() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
-  const router = Router()
-
-  function Router() {
-    return useRouter()
-  }
+  const router = useRouter()
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
