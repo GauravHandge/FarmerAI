@@ -8,10 +8,11 @@ const nextConfig = {
     unoptimized: true,
   },
   async rewrites() {
+    const backendPort = process.env.BACKEND_PORT || "8001"
     return [
       {
         source: "/api/backend/:path*",
-        destination: "http://127.0.0.1:8000/api/:path*",
+        destination: `http://127.0.0.1:${backendPort}/api/:path*`,
       },
     ]
   },
