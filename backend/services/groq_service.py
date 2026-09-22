@@ -28,6 +28,15 @@ class GroqService:
 
         return [system_msg] + clean_msgs
 
+    def _clean_repetition(self, text: str) -> str:
+        """Deduplicate repetitive token loops / words from AI text responses"""
+        if not text:
+            return ""
+        import re
+        cleaned = re.sub(r'(\b[\w\u0900-\u097F]+\b)(?:\s+\1){2,}', r'\1', text)
+        cleaned = re.sub(r'(.{6,})\1{2,}', r'\1', cleaned)
+        return cleaned.strip()
+
     async def chat(self, messages: List[Dict[str, str]], user_language: str = "auto") -> str:
         """Get full dynamic AI response with automatic history pruning and emergency context fallback"""
         headers = {
@@ -58,7 +67,7 @@ class GroqService:
                         data = response.json()
                         reply = data["choices"][0]["message"]["content"]
                         if reply and reply.strip():
-                            return reply.strip()
+                            return self._clean_repetition(reply.strip())
                     else:
                         print(f"[Groq API Warning]: Model '{model}' status {response.status_code}: {response.text}")
                         last_error = response.text
