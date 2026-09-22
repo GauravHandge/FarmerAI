@@ -11,8 +11,8 @@ else:
     load_dotenv()
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY", "")
-GROQ_MODEL = os.getenv("GROQ_MODEL", "openai/gpt-oss-20b")
-GROQ_FALLBACK_MODELS = ["openai/gpt-oss-20b", "openai/gpt-oss-120b", "allam-2-7b"]
+GROQ_MODEL = os.getenv("GROQ_MODEL", "allam-2-7b")
+GROQ_FALLBACK_MODELS = ["allam-2-7b", "openai/gpt-oss-120b", "qwen/qwen3.8-27b"]
 GROQ_WHISPER_MODEL = os.getenv("GROQ_WHISPER_MODEL", "whisper-large-v3")
 PORT = int(os.getenv("PORT", "8000"))
 HOST = os.getenv("HOST", "0.0.0.0")

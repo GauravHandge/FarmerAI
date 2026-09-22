@@ -8,11 +8,16 @@ const nextConfig = {
     unoptimized: true,
   },
   async rewrites() {
-    const backendPort = process.env.BACKEND_PORT || "8001"
+    const backendHost = process.env.BACKEND_HOST || "host.docker.internal"
+    const backendPort = process.env.BACKEND_PORT || "8000"
     return [
       {
         source: "/api/backend/:path*",
-        destination: `http://127.0.0.1:${backendPort}/api/:path*`,
+        destination: `http://${backendHost}:${backendPort}/api/:path*`,
+      },
+      {
+        source: "/api/agri-ai",
+        destination: `http://${backendHost}:${backendPort}/api/chat`,
       },
     ]
   },

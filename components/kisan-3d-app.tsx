@@ -179,7 +179,7 @@ function Kisan3DAppContent() {
     setLoading(true)
 
     try {
-      const response = await fetch("/api/agri-ai", {
+      const response = await fetch("/api/backend/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
