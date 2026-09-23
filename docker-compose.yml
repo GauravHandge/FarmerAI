@@ -1,10 +1,7 @@
-version: '3.8'
-
 services:
+
   backend:
-    build:
-      context: .
-      dockerfile: backend/Dockerfile
+    image: 592668326593.dkr.ecr.us-east-1.amazonaws.com/farmer-backend:latest
     container_name: farmer-backend
     ports:
       - "8000:8000"
@@ -13,9 +10,7 @@ services:
     restart: always
 
   frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: 592668326593.dkr.ecr.us-east-1.amazonaws.com/farmer-frontend:latest
     container_name: farmer-frontend
     ports:
       - "4000:3000"

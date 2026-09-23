@@ -30,43 +30,40 @@ jobs:
       - name: Login to Amazon ECR
         uses: aws-actions/amazon-ecr-login@v2
 
-      # 4. Build Backend Docker image
+      # 4. Build Backend Docker Image
       - name: Build Backend Docker Image
         run: |
           docker build -f backend/Dockerfile -t farmer-backend .
 
-      # 5. Build Frontend Docker image
+      # 5. Build Frontend Docker Image
       - name: Build Frontend Docker Image
         run: |
           docker build -t farmer-frontend .
 
-      # 6. Tag Docker images
+      # 6. Tag Docker Images
       - name: Tag Docker Images
         run: |
           docker tag farmer-backend:latest 592668326593.dkr.ecr.us-east-1.amazonaws.com/farmer-backend:latest
           docker tag farmer-frontend:latest 592668326593.dkr.ecr.us-east-1.amazonaws.com/farmer-frontend:latest
 
-      # 7. Push images to ECR
+      # 7. Push Images to ECR
       - name: Push Images to ECR
         run: |
           docker push 592668326593.dkr.ecr.us-east-1.amazonaws.com/farmer-backend:latest
           docker push 592668326593.dkr.ecr.us-east-1.amazonaws.com/farmer-frontend:latest
 
-      # 8. Deploy latest images to EC2
+      # 8. Deploy to EC2 using SSM
       - name: Deploy to EC2
         run: |
           aws ssm send-command \
             --instance-ids i-0edcfbf41ed2be39b \
             --document-name "AWS-RunShellScript" \
             --parameters 'commands=[
+              "cd /home/ubuntu/FarmerAI",
+              "cp /home/ubuntu/.env /home/ubuntu/FarmerAI/.env",
               "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 592668326593.dkr.ecr.us-east-1.amazonaws.com",
-              "docker pull 592668326593.dkr.ecr.us-east-1.amazonaws.com/farmer-backend:latest",
-              "docker pull 592668326593.dkr.ecr.us-east-1.amazonaws.com/farmer-frontend:latest",
-              "docker stop farmer-backend || true",
-              "docker rm farmer-backend || true",
-              "docker stop farmer-frontend || true",
-              "docker rm farmer-frontend || true",
-              "docker run -d --name farmer-backend -p 8000:8000 592668326593.dkr.ecr.us-east-1.amazonaws.com/farmer-backend:latest",
-              "docker run -d --name farmer-frontend -p 4000:3000 592668326593.dkr.ecr.us-east-1.amazonaws.com/farmer-frontend:latest"
+              "docker compose pull",
+              "docker compose down",
+              "docker compose up -d"
             ]' \
             --comment "Deploy FarmerAI"
